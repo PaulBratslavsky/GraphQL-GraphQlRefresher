@@ -12,7 +12,7 @@ const graphQlschema = `
         events: [String!]!
     }
     type myRootMutation {
-        createEvent(name: String): String
+        createEvent(myName: String): String
     }
     schema {
         query: myRootQuery
@@ -20,9 +20,20 @@ const graphQlschema = `
     }
 `;
 
+const resolvers = {
+    events: () => {
+        return ['one','two','three'];
+    },
+    createEvent: (args) => {
+        const eventName = args.myName;
+        return eventName;
+    }
+};
+
 app.use('/graphql', graphQlHttp({
     schema: buildSchema(graphQlschema),
-    rootValue: {}
+    rootValue: resolvers,
+    graphiql: true,
 }) );
 
 
